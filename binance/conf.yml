@@ -1,0 +1,11 @@
+mongodb:
+  host: localhost:37017
+  log: log.binance
+  db: VnTrader_1Min_Db
+target:
+  symbol: ["EOSUSDT"]
+  start: 20180101
+  retry: 3
+# proxies:
+#   http: socks5://127.0.0.1:1080
+#   https: socks5://127.0.0.1:1080
