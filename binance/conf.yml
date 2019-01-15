@@ -1,5 +1,5 @@
 mongodb:
-  host: localhost:37017
+  host: localhost:27017
   log: log.binance
   db: VnTrader_1Min_Db
 target:
