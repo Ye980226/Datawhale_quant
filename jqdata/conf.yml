@@ -1,0 +1,21 @@
+login:
+  addr: tcp://data.quantos.org:8910
+  username: "18566262672"
+  password: "eyJhbGciOiJIUzI1NiJ9.eyJjcmVhdGVfdGltZSI6IjE1MTI3MDI3NTAyMTIiLCJpc3MiOiJhdXRoMCIsImlkIjoiMTg1NjYyNjI2NzIifQ.O_-yR0zYagrLRvPbggnru1Rapk4kiyAzcwYt2a3vlpM"
+mongodb:
+  host: localhost:37017
+  db: VnTrader_1Min_Db
+  latest: VnTrader_1Min_Db_latest
+history:
+  start: 20170101
+  symbols: 
+    - i.DCE
+    - j.DCE
+latest:
+  length: 2000
+  symbols:
+    - i1812.DCE
+    - j1901.DCE
+  
+
+  
