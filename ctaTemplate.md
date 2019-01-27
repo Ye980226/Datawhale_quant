@@ -509,7 +509,7 @@ class CtaTemplate(object):
         setattr(self, variable, bgDict)
         setattr(self, variable2, amDict)
 
-    秒级别的bar，类似分钟级别的参数，一般是给高频，而且秒级别的噪声很大，一般需要很
+    秒级别的bar，类似分钟级别的参数，一般是给高频，_而且秒级别的噪声很大_，一般需要很
     长的研究过程
     def generateHFBar(self,xSecond,size = 60):
         self.hfDict = {sym: BarGenerator(self.onHFBar,xSecond = xSecond)
