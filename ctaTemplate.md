@@ -1,4 +1,5 @@
 ctaTemplate类所在路径vnpy/trader/app/ctaStrategy/ctaTemplate.py
+
 ```python
 '''
 本文件包含了CTA引擎中的策略开发用模板，开发策略时需要继承CtaTemplate类。
@@ -69,12 +70,14 @@ class CtaTemplate(object):
             for key in self.paramList:
                 if key in setting:
                     d[key] = setting[key]
-        通过setting里的key和value自动在类内部创建属性，通过往self.__dict__[key]=value的方式，不懂的话可以自行百度self.__dict__
+        通过setting里的key和value自动在类内部创建属性，通过往self.__dict__[key]
+        =value的方式，不懂的话可以自行百度self.__dict__
         # self.posDict = {}
         # self.eveningDict = {}
         
     # ----------------------------------------------------------------------
-    NotImplementedError可以实现c++的pure virtual的功能，就是说子类必须继承父类的方法并加以实现，否则就报错
+    NotImplementedError可以实现c++的pure virtual的功能，就是说子类必须继承父类的
+    方法并加以实现，否则就报错
     引擎上会有四个功能键
     初始化->onInit
     启动->onStart
@@ -96,7 +99,8 @@ class CtaTemplate(object):
         """恢复策略（必须由用户继承实现）"""
         raise NotImplementedError
     # ----------------------------------------------------------------------
-    程序通过websocket与交易所建立持久化连接，交易所会推送给tick数据，引擎内部会把tick数据处理成固定的数
+    程序通过websocket与交易所建立持久化连接，交易所会推送给tick数据，引擎内部会把
+    tick数据处理成固定的数
     据格式,tick的数据格式如下
     # class VtTickData(VtBaseData):
     # """Tick行情数据类"""
@@ -155,8 +159,10 @@ class CtaTemplate(object):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------
-    onOrder会在订单发生变化的时候，进行推送，通过websocket传来，websocket会订阅很多频道，订单这个单独有
-    一个频道，行情数据也有单独的频道，传来的是json格式，内部处理成order的数据格式，格式如下
+    onOrder会在订单发生变化的时候，进行推送，通过websocket传来，websocket会订阅很
+    多频道，订单这个单独有
+    一个频道，行情数据也有单独的频道，传来的是json格式，内部处理成order的数据格式，
+    格式如下
     # class VtOrderData(VtBaseData):
     # """订单数据类"""
 
@@ -187,9 +193,12 @@ class CtaTemplate(object):
     #     # CTP/LTS相关
     #     self.frontID = EMPTY_INT                # 前置机编号
     #     self.sessionID = EMPTY_INT 
-    交易所会发来一个orderID作为唯一标志，传递某一个订单的状态order.status，有“未成交”，“部分成交”，“全
-    部成交”，“已撤销”，“未知”（未知时引擎内部处理的，用于应付掉线情况），vtOrderID是引擎内部根据orderID
-    维护的一个列表，也是唯一的，按从1开始的顺序递增，方便处理，所以一般在策略里都使用order.vtOrderID
+    交易所会发来一个orderID作为唯一标志，传递某一个订单的状态order.status，有“未成
+    交”，“部分成交”，“全
+    部成交”，“已撤销”，“未知”（未知时引擎内部处理的，用于应付掉线情况），vtOrderID
+    是引擎内部根据orderID
+    维护的一个列表，也是唯一的，按从1开始的顺序递增，方便处理，所以一般在策略里都使
+    用order.vtOrderID
     order.vtSymbol是你交易的品种
     order.direction是你下的这单的方向,多或空
     order.offset是你下的这单是开仓还是平仓
@@ -205,8 +214,10 @@ class CtaTemplate(object):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------
-    如果是完全成交或部分成交的order.status会被推到onTrade里，顺序在onOrder之后，所以如果要在onTrade里
-    写东西，最好不要写交易逻辑，不然会要先运行完onOrder再过来，速度跟不上，或者onOrder自己实现异步的，不
+    如果是完全成交或部分成交的order.status会被推到onTrade里，顺序在onOrder之后，
+    所以如果要在onTrade里
+    写东西，最好不要写交易逻辑，不然会要先运行完onOrder再过来，速度跟不上，或者
+    onOrder自己实现异步的，不
     阻塞到onTrade。
     trade的数据格式如下
     # class VtTradeData(VtBaseData):
@@ -282,28 +293,37 @@ class CtaTemplate(object):
     # ----------------------------------------------------------------------
     buy，sell，short，cover是四种下单方式，在onOrder里介绍了
 
-    def buy(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, stop=False):
+    def buy(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, 
+    stop=False):
         """买开"""
-        return self.sendOrder(CTAORDER_BUY, vtSymbol, price, volume, priceType, stop)
+        return self.sendOrder(CTAORDER_BUY, vtSymbol, price, volume, 
+        priceType, stop)
 
         # ----------------------------------------------------------------------
-    def sell(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, stop=False):
+    def sell(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE,
+    stop=False):
         """卖平"""
-        return self.sendOrder(CTAORDER_SELL, vtSymbol, price, volume, priceType, stop)
+        return self.sendOrder(CTAORDER_SELL, vtSymbol, price, volume, 
+        priceType, stop)
 
         # ----------------------------------------------------------------------
-    def short(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, stop=False):
+    def short(self, vtSymbol, price, volume, priceType = 
+    PRICETYPE_LIMITPRICE, stop=False):
         """卖开"""
-        return self.sendOrder(CTAORDER_SHORT, vtSymbol, price, volume, priceType, stop)
+        return self.sendOrder(CTAORDER_SHORT, vtSymbol, price, volume, 
+        priceType, stop)
 
         # ----------------------------------------------------------------------
-    def cover(self, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, stop=False):
+    def cover(self, vtSymbol, price, volume, priceType = 
+    PRICETYPE_LIMITPRICE, stop=False):
         """买平"""
-        return self.sendOrder(CTAORDER_COVER, vtSymbol, price, volume, priceType, stop)
+        return self.sendOrder(CTAORDER_COVER, vtSymbol, price, volume, 
+        priceType, stop)
 
     # ----------------------------------------------------------------------
     buy，sell，short，cover调用此函数发单
-    def sendOrder(self, orderType, vtSymbol, price, volume, priceType = PRICETYPE_LIMITPRICE, stop=False):
+    def sendOrder(self, orderType, vtSymbol, price, volume, priceType = 
+    PRICETYPE_LIMITPRICE, stop=False):
         """发送委托"""
         if self.trading:
             # 如果stop为True，则意味着发本地停止单
@@ -317,8 +337,9 @@ class CtaTemplate(object):
             return []
 
     # ----------------------------------------------------------------------
-    cancelOrder取消订单，传入参数是vtOrderID，每次发单buy，sell，cover，short返回值都是一个列表，列表
-    里只有一个元素就是vtOrderID，把那个vtOrderID传入可以实现撤单
+    cancelOrder取消订单，传入参数是vtOrderID，每次发单buy，sell，cover，short返
+    回值都是一个列表，列表里只有一个元素就是vtOrderID，把那个vtOrderID传入可以实现
+    撤单
     def cancelOrder(self, vtOrderID):
         """撤单"""
         # 如果发单号为空字符串，则不进行后续操作
@@ -340,7 +361,8 @@ class CtaTemplate(object):
     def cancelAllStopOrder(self):
         self.ctaEngine.cancelAllStopOrder(self.name)
 
-    batchCancelOrder批量撤单，如果单特别多，使用cancelOrder会慢，所以用batchCancelOrder
+    batchCancelOrder批量撤单，如果单特别多，使用cancelOrder会慢，所以用
+    batchCancelOrder
     def batchCancelOrder(self,vtOrderIDList):
         if len(vtOrderIDList)>5:
             self.writeCtaLog(u'策略发送批量撤单委托失败，单量超过5张')
@@ -360,7 +382,8 @@ class CtaTemplate(object):
     回测中使用，但实盘没有tick可以load所以不loadtick
     def loadTick(self, hours=1):
         """读取tick数据"""
-        return self.ctaEngine.loadTick(self.tickDbName, self.symbolList, hours)
+        return self.ctaEngine.loadTick(self.tickDbName, self.symbolList, 
+        hours)
 
     # ----------------------------------------------------------------------
     
@@ -405,21 +428,26 @@ class CtaTemplate(object):
     def loadHistoryBar(self,vtSymbol,type_,size= None,since = None):
         """策略开始前下载历史数据"""
 
-        if type_ in ["1min","5min","15min","30min","60min","120min","240min","360min","480min","1day","1week","1month"]:
+        if type_ in ["1min","5min","15min","30min","60min","120min","240min",
+        "360min","480min","1day","1week","1month"]:
             data = self.ctaEngine.loadHistoryBar(vtSymbol,type_,size,since)
             lastbar = data[-1]
             if 'min' in type_:
                 minute = int(type_[:-3])
 
-            if datetime.now() < (lastbar.datetime + timedelta(seconds = 60*minute)):
-                self.writeCtaLog(u'加载历史数据抛弃最后一个非完整K线，频率%s，时间%s'%(type_, lastbar.datetime))
+            if datetime.now() < (lastbar.datetime + timedelta(seconds = 
+            60*minute)):
+                self.writeCtaLog(u'加载历史数据抛弃最后一个非完整K线，频率%s，时
+                间%s'%(type_, lastbar.datetime))
                 data = data[:-1]
                 
             return data
             
         else:
             self.writeCtaLog(
-                u'下载历史数据参数错误，请参考以下参数["1min","5min","15min","30min","60min","120min","240min","360min","480min","1day","1week","1month"]，同时size建议不大于2000')
+                u'下载历史数据参数错误，请参考以下参数["1min","5min","15min",
+                "30min","60min","120min","240min","360min","480min","1day",
+                "1week","1month"]，同时size建议不大于2000')
             return
     策略内不会使用到
     def qryOrder(self, vtSymbol, status= None):
@@ -461,7 +489,8 @@ class CtaTemplate(object):
     #         variable = "bgDict"
     #         variable2 = "amDict"
     随后再介绍这两个类
-    def generateBarDict(self, onBar, xmin=0, onXminBar=None, size = 100, alignment='sharp', marketClose = (23,59)):
+    def generateBarDict(self, onBar, xmin=0, onXminBar=None, size = 100, 
+    alignment='sharp', marketClose = (23,59)):
         if xmin: 
             variable = "bg%sDict"%xmin
             variable2 = "am%sDict"%xmin
@@ -469,7 +498,8 @@ class CtaTemplate(object):
             variable = "bgDict"
             variable2 = "amDict"
         bgDict= {
-            sym: BarGenerator(onBar,xmin,onXminBar, alignment=alignment, marketClose=marketClose)
+            sym: BarGenerator(onBar,xmin,onXminBar, alignment=alignment, 
+            marketClose=marketClose)
             for sym in self.symbolList }
         
         amDict = {
@@ -479,7 +509,8 @@ class CtaTemplate(object):
         setattr(self, variable, bgDict)
         setattr(self, variable2, amDict)
 
-    秒级别的bar，类似分钟级别的参数，一般是给高频，而且秒级别的噪声很大，一般需要很长的研究过程
+    秒级别的bar，类似分钟级别的参数，一般是给高频，而且秒级别的噪声很大，一般需要很
+    长的研究过程
     def generateHFBar(self,xSecond,size = 60):
         self.hfDict = {sym: BarGenerator(self.onHFBar,xSecond = xSecond)
                         for sym in self.symbolList}
