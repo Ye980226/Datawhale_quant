@@ -96,7 +96,8 @@ class CtaTemplate(object):
         """恢复策略（必须由用户继承实现）"""
         raise NotImplementedError
     # ----------------------------------------------------------------------
-    程序通过websocket与交易所建立持久化连接，交易所会推送给tick数据，引擎内部会把tick数据处理成固定的数据格式,tick的数据格式如下
+    程序通过websocket与交易所建立持久化连接，交易所会推送给tick数据，引擎内部会把tick数据处理成固定的数
+    据格式,tick的数据格式如下
     # class VtTickData(VtBaseData):
     # """Tick行情数据类"""
 
@@ -154,7 +155,8 @@ class CtaTemplate(object):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------
-    onOrder会在订单发生变化的时候，进行推送，通过websocket传来，websocket会订阅很多频道，订单这个单独有一个频道，行情数据也有单独的频道，传来的是json格式，内部处理成order的数据格式，格式如下
+    onOrder会在订单发生变化的时候，进行推送，通过websocket传来，websocket会订阅很多频道，订单这个单独有
+    一个频道，行情数据也有单独的频道，传来的是json格式，内部处理成order的数据格式，格式如下
     # class VtOrderData(VtBaseData):
     # """订单数据类"""
 
@@ -185,7 +187,9 @@ class CtaTemplate(object):
     #     # CTP/LTS相关
     #     self.frontID = EMPTY_INT                # 前置机编号
     #     self.sessionID = EMPTY_INT 
-    交易所会发来一个orderID作为唯一标志，传递某一个订单的状态order.status，有“未成交”，“部分成交”，“全部成交”，“已撤销”，“未知”（未知时引擎内部处理的，用于应付掉线情况），vtOrderID是引擎内部根据orderID维护的一个列表，也是唯一的，按从1开始的顺序递增，方便处理，所以一般在策略里都使用order.vtOrderID
+    交易所会发来一个orderID作为唯一标志，传递某一个订单的状态order.status，有“未成交”，“部分成交”，“全
+    部成交”，“已撤销”，“未知”（未知时引擎内部处理的，用于应付掉线情况），vtOrderID是引擎内部根据orderID
+    维护的一个列表，也是唯一的，按从1开始的顺序递增，方便处理，所以一般在策略里都使用order.vtOrderID
     order.vtSymbol是你交易的品种
     order.direction是你下的这单的方向,多或空
     order.offset是你下的这单是开仓还是平仓
@@ -201,7 +205,9 @@ class CtaTemplate(object):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------
-    如果是完全成交或部分成交的order.status会被推到onTrade里，顺序在onOrder之后，所以如果要在onTrade里写东西，最好不要写交易逻辑，不然会要先运行完onOrder再过来，速度跟不上，或者onOrder自己实现异步的，不阻塞到onTrade。
+    如果是完全成交或部分成交的order.status会被推到onTrade里，顺序在onOrder之后，所以如果要在onTrade里
+    写东西，最好不要写交易逻辑，不然会要先运行完onOrder再过来，速度跟不上，或者onOrder自己实现异步的，不
+    阻塞到onTrade。
     trade的数据格式如下
     # class VtTradeData(VtBaseData):
     # """
@@ -311,7 +317,8 @@ class CtaTemplate(object):
             return []
 
     # ----------------------------------------------------------------------
-    cancelOrder取消订单，传入参数是vtOrderID，每次发单buy，sell，cover，short返回值都是一个列表，列表里只有一个元素就是vtOrderID，把那个vtOrderID传入可以实现撤单
+    cancelOrder取消订单，传入参数是vtOrderID，每次发单buy，sell，cover，short返回值都是一个列表，列表
+    里只有一个元素就是vtOrderID，把那个vtOrderID传入可以实现撤单
     def cancelOrder(self, vtOrderID):
         """撤单"""
         # 如果发单号为空字符串，则不进行后续操作
@@ -350,7 +357,7 @@ class CtaTemplate(object):
     #     self.ctaEngine.insertData(self.barDbName, self.vtSymbol, bar)
 
     # ----------------------------------------------------------------------
-    回测中，但为了实盘一直，不做这件事
+    回测中使用，但实盘没有tick可以load所以不loadtick
     def loadTick(self, hours=1):
         """读取tick数据"""
         return self.ctaEngine.loadTick(self.tickDbName, self.symbolList, hours)
